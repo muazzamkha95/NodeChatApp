@@ -1,0 +1,130 @@
+extends layout
+
+mixin message(opp, name)
+    if(opp)
+        h1.greeting Logged in as 
+            span=name 
+    else 
+        h1.greeting Welcome 
+            span=name 
+            |  to our website
+
+block content 
+  .wrapper.wrapper-content#app
+        .row.nav
+            .col-lg-2
+               img(height="70", width="100" ,src='https://lh3.googleusercontent.com/proxy/_35CqQu1hqym468QzGTTNrxHJavpZIXrcwv-J6VexcNCN05GHzSAl_TgU7c-xp58QcJd8vtJyWQALNTWcnGdql86FlaBJL-1DmcCkRS1DJ8' alt)
+            .col-lg-10 
+                .row  
+                    .col-md-10
+                        .paragraph(style='text-align:left;')
+                            | By entering the Torrington chat room, you agree to the following terms and conditions:
+                            br
+                            | 1. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+                            br
+                            | 2. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+                    //-    +message(opp, name)
+                    .col-md-2
+                        
+                        if(opp)
+                            input.form-control(type='text'  placeholder='username' value="!{name}")
+                            .dropdown
+                                button.btn.btn-primary.dropdown-toggle#dropdownMenuButton(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false',style="margin-top:15px;") !{name}
+                                .dropdown-menu(aria-labelledby='dropdownMenuButton')
+                                    a.dropdown-item(href="/loggout") Loggout    
+                              
+                        else
+                             a.btn.btn-primary(href="/login",style="margin-top:15px;") Login     
+        .row
+            .col-lg-12
+                .ibox.chat-view    
+                    //- .ibox-title
+                    //-     small.pull-right.text-muted Last message: Mon Jan 26 2015 - 18:39:23 |  Chat room panel
+                    .ibox-content
+                        .row
+                            if(!opp)
+                                .col-md-3.pdt10
+                                        form(method="post" action="/register")
+                                            p.lable Username !{name}
+                                            input.form-control(type="text" name="username")
+                                            p.lable Fullname      
+                                            input.form-control(type="text" name="fullname")
+                                            p.lable Password 
+                                            input.form-control(type="password" name="password")
+                                            p.lable Confirm password 
+                                            input.form-control(type="password" name="confirm-password")
+                                            br
+                                            input.btn.btn-primary.pull-right(type="submit" value="Register")
+                                            br
+                                            hr
+
+                                        form(method="post" action="/login")
+                                            
+                                            p.lable Username 
+                                            input.form-control(type="text" name="username")    
+                                            p.lable Password 
+                                            input.form-control(type="password" name="password")
+                                            br
+                                            input.btn.btn-primary.pull-right(type="submit" value="Login")
+                            if(!opp)
+                                .col-md-9
+                                    .box
+                                        .chat-discussion   
+                                            .chat-message.left
+                                                .media.msg( v-for="message in messages")
+                                                    .media-body
+                                                        small.pull-right.time
+                                                            i.fa.fa-clock-o
+                                                            |  12:10am
+                                                        h5.media-heading
+                                                            b :{{message.user}}
+                                                        small.col-lg-10  {{message.message}} 
+                                                    //- small.text-white(v-if='typing') {{typing}} is typing
+                                                
+                                        .row
+                                            .col-md-11
+                                                if(opp)
+                                                    input.form-control(type="text", name="message",placeholder="Write Message")
+                                                else
+                                                    input.form-control(type="text", name="message",placeholder="Write Message" disabled="true",title="Please Login to send Message")
+                                            .col-md-1
+                                                if(opp)
+                                                    button.btn.btn-primary Send
+                                                else
+                                                    button.btn.btn-primary(disabled="true") Send    
+                            else
+                                .col-md-12
+                                    .box
+                                        .chat-discussion   
+                                            .chat-message.left
+                                                .media.msg( v-for="message in messages")
+                                                    .media-body
+                                                        small.pull-right.time
+                                                            i.fa.fa-clock-o
+                                                            |  12:10am
+                                                        h5.media-heading
+                                                            b :{{message.user}}
+                                                        small.col-lg-10  {{message.message}}
+                                        .row
+                                            .col-md-11
+                                                if(opp)
+                                                
+                                                    form(@submit.prevent='send')
+                                                        .form-group
+                                                            input.form-control(type='text' v-model='newMessage' placeholder='Enter message here')
+
+                                                            
+
+                                                            
+                                                            
+                                                else
+                                                    input.form-control(type="text", name="message",placeholder="Write Message" disabled="true",title="Please Login to send Message")
+                                            .col-md-1
+                                                if(opp)
+                                                    button.btn.btn-primary Send
+                                                else
+                                                    button.btn.btn-primary(disabled="true") Send    
+    
+
+                                                                                    
+                                                

@@ -1,0 +1,14 @@
+doctype html
+html(lang="en")
+    head 
+        title=title
+        include includes/styles 
+        block links
+        
+    body 
+        .page-wrapper 
+            //- include includes/header 
+            block content
+            
+    script(src='/socket.io/socket.io.js')
+    script(src='/main.js')

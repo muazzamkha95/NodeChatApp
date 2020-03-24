@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lets Chat</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    
+    <!------ Include the above in your HEAD tag ---------->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="/public/css/newChat.css" rel="stylesheet">
+
+
+</head>
+<body>
+   
+    <div id="app">
+        <div class="container-fluid">
+            <nav class="navbar navbar-light  navbar-expand-lg" style="background: #d9edf7; border-bottom: 1px solid blue;">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="navbar-brand" href="#">
+                            <img src="https://lh3.googleusercontent.com/proxy/_35CqQu1hqym468QzGTTNrxHJavpZIXrcwv-J6VexcNCN05GHzSAl_TgU7c-xp58QcJd8vtJyWQALNTWcnGdql86FlaBJL-1DmcCkRS1DJ8" width="30" height="30" class="d-inline-block align-top" alt="">
+                            Lets Chat
+                          </a>
+                    </div>
+                    <div class="col-md-8 ">
+                        <p style="text-align: left;"> 
+                            By entering the Torrington chat room, you agree to the following terms and conditions:
+                           <br/>
+                            1. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+                           <br/>
+                           2. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+                       </p>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" style="margin-top: 10px;">Logout</button>
+                    </div>
+                </div>
+                
+              </nav>
+              
+            
+            <div class="row">
+        
+                <div class="conversation-wrap col-lg-3 " style="padding-left: 20px;">
+        
+                    <div class="media conversation">
+                        <form method="post" action="/register">
+                            <p class="lable">Username </p>
+                            <input class="form-control" type="text" name="username">
+                            <p class="lable">Fullname      </p>
+                            <input class="form-control" type="text" name="fullname">
+                            <p class="lable">Password </p>
+                            <input class="form-control" type="password" name="password">
+                            <p class="lable">Confirm password </p>
+                            <input class="form-control" type="password" name="confirm-password"><br>
+                            <input class="btn btn-primary pull-right" type="submit" value="Register">
+                            <br><hr>
+                        </form>
+        
+                        <form method="post" action="/login">
+                            <p class="lable">Username </p>
+                            <input class="form-control" type="text" name="username">
+                            <p class="lable">Password </p>
+                            <input class="form-control" type="password" name="password">
+                            <br>
+                            <input class="btn btn-primary pull-right" type="submit" value="Login">
+                        </form>
+                    </div>
+                    
+                </div>
+        
+        
+        
+                <div class="message-wrap col-lg-8">
+                    <div class="msg-wrap">
+        
+        
+                        <div class="media msg ">
+                            <div class="media-body" v-for="message in messages">
+                                <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
+                                <h5 class="media-heading"><b>{{message.user}}</b></h5>
+                                <small class="col-lg-10">{{message.message}}</small>
+                            </div>
+                            <small v-if="typing" class="text-white">{{typing}} is typing</small>
+                        </div>
+                        
+        
+                    </div>
+        
+                    <div class="send-wrap ">
+                        <form @submit.prevent="send">
+                            <div class="form-group">
+                                <input type="text" class="form-control" v-model="newMessage"
+                                    placeholder="Enter message here">
+
+                            </div>
+                        </form>
+                        <!-- <textarea class="form-control send-message" rows="3" placeholder="Write a reply..." @submit.prevent="send" v-model="newMessage"></textarea> -->
+        
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Client side Socket.IO object
+    var socket = io();
+    
+    // Creating a new Vue Instance
+    let vue = new Vue({
+        
+        // Adding a root element to our vue app
+        el: '#app',
+
+        // Declaring our data object with empty arrays and properties
+        data: {
+            newMessage: null,
+            messages: [],
+            typing: false,
+            username: null,
+            ready: false,
+            info: [],
+            connections: 0,
+        },
+        
+        
+        // Our vue created method
+        created() {
+            
+            
+            // Emitting 'leave' event on tab closed event.
+            window.onbeforeunload = () => {
+                socket.emit('leave', this.username);
+            }
+            
+            // Listening to chat-message event emitted from the server and pushing to messages array
+            socket.on('chat-message', (data) => {
+                this.messages.push({
+                    message: data.message,
+                    type: 1,
+                    user: data.user,
+                });
+            });
+            
+            
+            // Listening to typing event emitted from the server and setting the data (username) to the UI
+            socket.on('typing', (data) => {
+                this.typing = data;
+            });
+
+             // Listening to stopTyping event emitted from the server and setting the typing property to false
+            socket.on('stopTyping', () => {
+                this.typing = false;
+            });
+
+             // Listening to 'joined' event emitted from the server and pushing the data to info array
+            socket.on('joined', (data) => {
+                this.info.push({
+                    username: data,
+                    type: 'joined'
+                });
+
+                // Setting a time out for the info array to be emptied
+                setTimeout(() => {
+                    this.info = [];
+                }, 5000);
+            });
+
+            // Listening to 'leave' event emitted from the server and pushing the data to info array
+            socket.on('leave', (data) => {
+                this.info.push({
+                    username: data,
+                    type: 'left'
+                });
+                
+                // Setting a time out for the info array to be emptied
+                setTimeout(() => {
+                    this.info = [];
+                }, 5000);
+            });
+
+             // Listening to 'connections' event emitted from the server to get the total number of connected clients
+            socket.on('connections', (data) => {
+                this.connections = data;
+            });
+        },
+
+        // Vue Watch hook
+        watch: {
+            
+            // Watching for changes in the message inbox box and emitting the either 'typing' or 'stopTyping' event
+            newMessage(value) {
+                value ? socket.emit('typing', this.username) : socket.emit('stopTyping')
+            }
+        },
+
+        //Vue Methods hook
+        methods: {
+            
+            //The send method stores the user message and emit an event to the server.
+            send() {
+                this.messages.push({
+                    message: this.newMessage,
+                    type: 0,
+                    user: 'Me',
+                });
+
+                socket.emit('chat-message', {
+                    message: this.newMessage,
+                    user: this.username
+                });
+                this.newMessage = null;
+            },
+
+            // The addUser method emit a 'joined' event with the username and set the 'ready' property to true.
+            addUser() {
+                this.ready = true;
+                socket.emit('joined', this.username)
+            },
+            getUser(){
+                return re
+            }
+        },
+
+    });
+</script>
+</html>

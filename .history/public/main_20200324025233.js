@@ -1,0 +1,1 @@
+alert('Hello Muazzam I am ok');

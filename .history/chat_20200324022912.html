@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lets Chat</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    
+    <!------ Include the above in your HEAD tag ---------->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="/public/css/newChat.css" rel="stylesheet">
+
+
+</head>
+<body>
+   
+
+<div class="container-fluid">
+    <nav class="navbar navbar-light  navbar-expand-lg" style="background: #d9edf7; border-bottom: 1px solid blue;">
+        <div class="row">
+            <div class="col-md-2">
+                <a class="navbar-brand" href="#">
+                    <img src="https://lh3.googleusercontent.com/proxy/_35CqQu1hqym468QzGTTNrxHJavpZIXrcwv-J6VexcNCN05GHzSAl_TgU7c-xp58QcJd8vtJyWQALNTWcnGdql86FlaBJL-1DmcCkRS1DJ8" width="30" height="30" class="d-inline-block align-top" alt="">
+                    Lets Chat
+                  </a>
+            </div>
+            <div class="col-md-8 ">
+                <p style="text-align: left;"> 
+                    By entering the Torrington chat room, you agree to the following terms and conditions:
+                   <br/>
+                    1. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+                   <br/>
+                   2. Spamming and linking to competing sites is strictly prohibited. Such action will result in permanent banning from the Torrington chat room.
+               </p>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" style="margin-top: 10px;">Logout</button>
+            </div>
+        </div>
+        
+      </nav>
+      
+    
+    <div class="row">
+
+        <div class="conversation-wrap col-lg-3 " style="padding-left: 20px;">
+
+            <div class="media conversation">
+                <form method="post" action="/register">
+                    <p class="lable">Username </p>
+                    <input class="form-control" type="text" name="username">
+                    <p class="lable">Fullname      </p>
+                    <input class="form-control" type="text" name="fullname">
+                    <p class="lable">Password </p>
+                    <input class="form-control" type="password" name="password">
+                    <p class="lable">Confirm password </p>
+                    <input class="form-control" type="password" name="confirm-password"><br>
+                    <input class="btn btn-primary pull-right" type="submit" value="Register">
+                    <br><hr>
+                </form>
+
+                <form method="post" action="/login">
+                    <p class="lable">Username </p>
+                    <input class="form-control" type="text" name="username">
+                    <p class="lable">Password </p>
+                    <input class="form-control" type="password" name="password">
+                    <br>
+                    <input class="btn btn-primary pull-right" type="submit" value="Login">
+                </form>
+            </div>
+            
+        </div>
+
+
+
+        <div class="message-wrap col-lg-8">
+            <div class="msg-wrap">
+
+
+                <div class="media msg ">
+                    <div class="media-body">
+                        <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
+                        <h5 class="media-heading"><b>Naimish Sakhpara</h5>
+                        <small class="col-lg-10">Location H-2, Ayojan Nagar, Near Gate-3, Near
+                            Shreyas Crossing Dharnidhar Derasar,
+                            Paldi, Ahmedabad 380007, Ahmedabad,
+                            India
+                            Phone 091 37 669307
+                            Email aapamdavad.district@gmail.com</small>
+                    </div>
+                </div>
+                
+
+            </div>
+
+            <div class="send-wrap ">
+
+                <textarea class="form-control send-message" rows="3" placeholder="Write a reply..."></textarea>
+
+
+            </div>
+            <div class="btn-panel">
+                <a href="" class=" col-lg-3 btn   send-message-btn " role="button"><i class="fa fa-cloud-upload"></i> Add Files</a>
+                <a href="" class=" col-lg-4 text-right btn   send-message-btn pull-right" role="button"><i class="fa fa-plus"></i> Send Message</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</html>

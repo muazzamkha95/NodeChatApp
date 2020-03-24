@@ -1,0 +1,9 @@
+extends layout
+block links
+    link(rel="stylesheet", href="/css/style.css")    
+block content 
+    if(registered)
+        .alert.alert-success Registered Successfully! Please Login With your credentials
+    .login-panel 
+        img(src="img/login-img.jpg")
+        include includes/login-form 
