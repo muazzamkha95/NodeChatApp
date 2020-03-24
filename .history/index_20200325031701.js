@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const User = require('../NodeChatApp-master/core/user');
 
-const ChatMessages = require('../NodeChatApp-master/core/chatMessages');
+const ChatMessages = require('../ChatApp/core/chatMessages');
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 const path = require('path');
