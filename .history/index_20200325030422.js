@@ -9,14 +9,19 @@ let io = require('socket.io')(http);
 const path = require('path');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+// const pageRouter = require('./routes/pages');
 
 app.set('view engine', 'pug');
 const user = new User();
 
 const chatMessages = new ChatMessages();
-
+// Routers
+// app.use('/', pageRouter);
+// for body parser. to collect data that sent from the client.
 app.use(express.urlencoded( { extended : false}));
-
+// app.use(bodyParser.urlencoded({
+//     extended: true
+//   }));
 app.use(bodyParser.json());
 
 
@@ -33,19 +38,19 @@ app.use(session({
     }
 }));
 app.get('/getMessages',(req,res)=>{
-    // Connection with database
-    var con = mysql.createConnection({
+     var con = mysql.createConnection({
         host: "localhost",
         user: "root",
         password: "",
         database: "chatApp"
         });
-    // Query for getting all the messages
+
     con.connect(function(err) {
         if (err) throw err;
         con.query("SELECT * FROM chatMessages ORDER BY date ASC", function (err, result) {
             if (err) throw err;
             if(result){
+
                 return res.json(result);
             }else{
                 console.log('No result found')
@@ -59,7 +64,7 @@ app.get('/getMessages',(req,res)=>{
 app.get("/session-user", (request, response, next) => { 
 
     let user = request.session.user;
-    // return Logged In user
+    // return user;
     if(user){
         return response.json(user);
     }else{
@@ -77,6 +82,7 @@ app.get('/', (req, res) => {
     else{
         res.render('chat', {opp:null, name:'Guest'});
     }
+    // res.sendFile(__dirname + '/chat.html')
 });
 
 app.get('/login',(req, res, next)=>{
@@ -89,6 +95,10 @@ app.get('/signup',(req, res, next)=>{
 
 app.post('/SaveMessage', (req, res) => {
     // prepare an object containing all user inputs.
+    // console.log(req.body.username);
+    // return;
+    // return res.json(req.body);
+    // return res.json(res.body);
     let userInput = {
         username: req.body.username,
         message: req.body.message,

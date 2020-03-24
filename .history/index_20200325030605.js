@@ -9,14 +9,19 @@ let io = require('socket.io')(http);
 const path = require('path');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+// const pageRouter = require('./routes/pages');
 
 app.set('view engine', 'pug');
 const user = new User();
 
 const chatMessages = new ChatMessages();
-
+// Routers
+// app.use('/', pageRouter);
+// for body parser. to collect data that sent from the client.
 app.use(express.urlencoded( { extended : false}));
-
+// app.use(bodyParser.urlencoded({
+//     extended: true
+//   }));
 app.use(bodyParser.json());
 
 
